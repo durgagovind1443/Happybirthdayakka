@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Akka! 🌸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --pink-light: #fff1f2;
+            --pink-primary: #ff4d8d;
+            --pink-dark: #cc2963;
+            --pink-glow: rgba(255, 77, 141, 0.4);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--pink-light);
+            overflow: hidden;
+        }
+
+        /* --- 1. ANIMATED LOCK SCREEN STYLES --- */
+        #lockScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .lock-container {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(225, 29, 72, 0.15);
+            text-align: center;
+            max-width: 360px;
+            width: 85%;
+            border: 2px solid #fbcfe8;
+            animation: containerGlow 3s infinite ease-in-out;
+        }
+
+        @keyframes containerGlow {
+            0%, 100% { box-shadow: 0 15px 35px rgba(225, 29, 72, 0.15); }
+            50% { box-shadow: 0 15px 40px rgba(255, 77, 141, 0.35); border-color: #f472b6; }
+        }
+
+        .lock-icon-anim {
+            font-size: 3.5rem;
+            color: var(--pink-primary);
+            margin-bottom: 15px;
+            animation: pulseHeart 1.5s infinite;
+        }
+
+        @keyframes pulseHeart {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); text-shadow: 0 0 15px var(--pink-primary); }
+        }
+
+        .lock-container h2 {
+            margin: 0 0 10px 0;
+            color: #4c0519;
+            font-size: 1.6rem;
+        }
+
+        .lock-container p {
+            color: #9d174d;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid #f472b6;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: 2px;
+            box-sizing: border-box;
+            outline: none;
+            color: var(--pink-dark);
+            background: #fff5f7;
+            transition: 0.3s;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--pink-primary);
+            box-shadow: 0 0 12px var(--pink-glow);
+            background: white;
+        }
+
+        .unlock-btn {
+            background: linear-gradient(90deg, #ff4d8d, #ff75a0);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 77, 141, 0.4);
+            transition: 0.3s;
+        }
+
+        .unlock-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 77, 141, 0.6);
+        }
+
+        .error-msg {
+            color: #e11d48;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            display: none;
+            font-weight: 600;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        /* --- 2. MAIN CELEBRATION SCREEN STYLES --- */
+        #mainContent {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #fff5f6, #ffe4e6);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* Floating Words Canvas Container */
+        .words-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .floating-word {
+            position: absolute;
+            font-family: 'Great Vibes', cursive;
+            font-weight: bold;
+            color: var(--pink-primary);
+            white-space: nowrap;
+            opacity: 0;
+            animation: floatUp 8s linear infinite;
+            text-shadow: 1px 1px 4px rgba(255,255,255,0.8);
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) translateX(0) scale(0.7); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) translateX(50px) scale(1.2); opacity: 0; }
+        }
+
+        /* Central Greeting Card */
+        .card-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 450px;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .bday-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 40px 30px;
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 40px rgba(255, 77, 141, 0.15);
+            animation: cardEntrance 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes cardEntrance {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .main-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: var(--pink-dark);
+            margin: 0;
+            line-height: 1.2;
+            text-shadow: 2px 2px 0px rgba(255,255,255,0.5);
+        }
+
+        .sub-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4c0519;
+            margin: 15px 0;
+            letter-spacing: 1px;
+        }
+
+        .wish-text {
+            font-size: 0.95rem;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* Decorative Elements */
+        .gift-box-icon {
+            font-size: 3rem;
+            color: var(--pink-primary);
+            margin-bottom: 15px;
+            animation: swing 2s infinite ease-in-out;
+        }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        /* Confetti Canvas */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="lockScreen">
+        <div class="lock-container">
+            <div class="lock-icon-anim">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h2>Surprise inside! 💕</h2>
+            <p>Please enter the secret password to open your birthday surprise website.</p>
+            
+            <div class="input-wrapper">
+                <input type="password" id="passwordField" placeholder="ENTER PASSWORD..." autocomplete="off">
+                <div class="error-msg" id="errorMsg">❌ Wrong Password! Hint: Maa lovely akka nickname</div>
+            </div>
+            
+            <button class="unlock-btn" onclick="verifyPassword()">Unlock Surprise ✨</button>
+        </div>
+    </div>
+
+    <div id="mainContent">
+        <div class="words-container" id="wordsContainer"></div>
+        
+        <canvas id="confettiCanvas"></canvas>
+
+        <div class="card-container">
+            <div class="bday-card">
+                <div class="gift-box-icon">
+                    <i class="fas fa-birthday-cake"></i>
+                </div>
+                <h1 class="main-title">Happy Birthday</h1>
+                <h2 class="sub-title">MY DEAR LOVELY AKKA! 🌸</h2>
+                <p class="wish-text">
+                    Wishing you a day filled with love, beautiful surprises, and endless happiness. Thank you for always being the most amazing and supportive sister in the world! 💕
+                </p>
+                <div style="color: var(--pink-primary); font-size: 1.5rem;">
+                    <i class="fas fa-heart"></i>&nbsp;&nbsp;<i class="fas fa-sparkles"></i>&nbsp;&nbsp;<i class="fas fa-heart"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="bdayAudio" src="https://assets.mixkit.co/active_storage/sfx/2691/2691-84.wav" preload="auto"></audio>
+
+    <script>
+        // --- PASSWORD VALIDATION LOGIC ---
+        function verifyPassword() {
+            const userInput = document.getElementById('passwordField').value;
+            const errorElement = document.getElementById('errorMsg');
+            
+            // Checking text safely by converting to uppercase (Handles both small/capital letter cases)
+            if (userInput.toUpperCase() === 'CHINNU') {
+                // Play a sweet pop/chime sound on unlock
+                try { document.getElementById('bdayAudio').play(); } catch(e) {}
+                
+                // Animate lock screen layout sliding up
+                document.getElementById('lockScreen').style.transform = 'translateY(-100%)';
+                document.getElementById('mainContent').style.display = 'block';
+                
+                // Initialize premium background canvas animations
+                setTimeout(() => {
+                    startConfetti();
+                    generateFloatingWords();
+                }, 400);
+            } else {
+                errorElement.style.display = 'block';
+                // Trigger shake effect reset
+                errorElement.style.animation = 'none';
+                setTimeout(() => { errorElement.style.animation = 'shake 0.4s ease-in-out'; }, 10);
+            }
+        }
+
+        // Support triggering unlock feature on pressing "Enter Key"
+        document.getElementById('passwordField').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') { verifyPassword(); }
+        });
+
+        // --- FLOATING WORDS DYNAMIC GENERATION ---
+        const textBank = [
+            "HAPPY BIRTHDAY MY DEAR LOVELY AKKA", 
+            "CHINNU 💕", "Best Sister ✨", "Love You Akka 🌸", 
+            "Happy Birthday", "My Lovely Akka"
+        ];
+
+        function generateFloatingWords() {
+            const container = document.getElementById('wordsContainer');
+            setInterval(() => {
+                const span = document.createElement('span');
+                span.className = 'floating-word';
+                span.innerText = textBank[Math.floor(Math.random() * textBank.length)];
+                
+                // Set random positions and sizes dynamically
+                span.style.left = Math.random() * 80 + 5 + '%';
+                span.style.fontSize = Math.random() * 1.5 + 1.2 + 'rem';
+                span.style.animationDuration = Math.random() * 4 + 6 + 's'; // 6s to 10s
+                
+                // Soft pink variations for text contrast
+                const pinkVariations = ['#ff4d8d', '#cc2963', '#ff75a0', '#db2777', '#f472b6'];
+                span.style.color = pinkVariations[Math.floor(Math.random() * pinkVariations.length)];
+                
+                container.appendChild(span);
+                
+                // Clean memory by removing elements post animation completion
+                setTimeout(() => { span.remove(); }, 10000);
+            }, 800); // Emits a word every 800ms
+        }
+
+        // --- CONFETTI PARTICLE EFFECT ENGINE ---
+        function startConfetti() {
+            const canvas = document.getElementById('confettiCanvas');
+            const ctx = canvas.getContext('2d');
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+            
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const particles = [];
+            const colors = ['#ff4d8d', '#ff75a0', '#f472b6', '#fbcfe8', '#f43f5e', '#ffffff'];
+
+            for (let i = 0; i < 120; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height - height,
+                    r: Math.random() * 6 + 4,
+                    d: Math.random() * width,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    tilt: Math.random() * 10 - 5,
+                    tiltAngleIncremental: Math.random() * 0.07 + 0.02,
+                    tiltAngle: 0
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach((p, idx) => {
+                    p.tiltAngle += p.tiltAngleIncremental;
+                    p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+                    p.x += Math.sin(p.tiltAngle);
+                    p.tilt = Math.sin(p.tiltAngle - idx / 3) * 15;
+
+                    ctx.beginPath();
+                    ctx.lineWidth = p.r;
+                    ctx.strokeStyle = p.color;
+                    ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+                    ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+                    ctx.stroke();
+
+                    // Recycle falling elements back to top
+                    if (p.y > height) {
+                        particles[idx] = {
+                            x: Math.random() * width,
+                            y: -20,
+                            r: p.r,
+                            d: p.d,
+                            color: p.color,
+                            tilt: p.tilt,
+                            tiltAngleIncremental: p.tiltAngleIncremental,
+                            tiltAngle: p.tiltAngle
+                        };
+                    }
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+    </script>
+</body>
+</html>
